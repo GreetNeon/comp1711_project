@@ -1,6 +1,13 @@
 #include <stdio.h>
 #include <string.h>
 
+void read_from_file(FILE *input_file){
+    char buffer[30];
+    fgets(buffer, sizeof(buffer), input_file);
+    printf("%s", buffer);
+    return;
+}
+
 void main(){
     typedef struct{
         char date[11];
@@ -14,12 +21,7 @@ void main(){
     else{
         printf("File opened successfully!\n");
     }
-    printf("%s\n", data_stream);
+    read_from_file(data_stream);
     return;
 
-}
-
-void read_from_file(FILE* input_file){
-    char buffer[30];
-    
 }
