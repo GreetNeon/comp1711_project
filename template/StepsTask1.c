@@ -43,6 +43,6 @@ void tokeniseRecord(const char *input, const char *delimiter,
 
 // Complete the main function
 int main() {
-
+    tokeniseRecord("2020-12-20,08:15,150", ",", "2020-12-20", "08:15", "150");
 
 }
