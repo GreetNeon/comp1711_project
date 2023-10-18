@@ -1,10 +1,16 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
 
 void read_from_file(FILE *input_file){
     char buffer[30];
+    while (feof(input_file) != true)
+    {
     fgets(buffer, sizeof(buffer), input_file);
-    printf("%s", buffer);
+    printf("%s", buffer);  
+    }
+    
+    
     return;
 }
 
