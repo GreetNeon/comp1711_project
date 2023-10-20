@@ -1,64 +1,17 @@
-#include <stdio.h>
+#include "fitness_header.h"
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 
-// Define an appropriate struct
 typedef struct{
     char date[11];
     char time[6];
     char steps[10];
 } Fitness_Data;
 
-// Define any additional variables here
 
-
-
-// This is your helper function. Do not change it in any way.
-// Inputs: character array representing a row; the delimiter character
-// Ouputs: date character array; time character array; steps character array
-void tokeniseRecord(const char *input, const char *delimiter,
-                    char *date, char *time, char *steps) {
-    // Create a copy of the input string as strtok modifies the string
-    char *inputCopy = strdup(input);
-    
-    // Tokenize the copied string
-    char *token = strtok(inputCopy, delimiter);
-    if (token != NULL) {        strcpy(date, token);
-    }
-    
-    token = strtok(NULL, delimiter);
-    if (token != NULL) {
-        strcpy(time, token);
-    }
-    
-    token = strtok(NULL, delimiter);
-    if (token != NULL) {
-        strcpy(steps, token);
-    }
-    
-    // Free the duplicated string
-    free(inputCopy);
-
-}
-int get_row_count(FILE* count_file){
-    //Defining a buffer to be used in order to count the number of rows
-    char count_buffer[30];
-    //Initialising the row counter to 0
-    int row_count = 0;
-    //Looping through the csv file
-    while (fgets(count_buffer, sizeof(count_buffer), count_file)){
-        //indexing the row counter each loop
-        row_count++;
-    }
-    //closing the count file
-    fclose(count_file);
-
-    return row_count;
-}
-
-
-// Complete the main function
-void main(char *file_loc){
+void read_from_file(char *file_loc){
     //Defining a File to be counted and a file to be formatted
     FILE* count_file = fopen(file_loc, "r"); 
     FILE* input_file = fopen(file_loc, "r");
@@ -92,4 +45,19 @@ void main(char *file_loc){
     
     return;
 }
-//main(/workspaces/comp1711_project/data/FitnessData_2023.csv);
+
+void main(){
+    //Main function to create menu and take input
+    char choice, buffer[1248];
+    int string_len;
+    printf("This is a File Handling System\n\nOptions:\n A-Input filename\n B-Display number of records\n C-Date with lowest steps\n D-Date with highest steps\n E-Mean step count\n F-Longest Period of steps above 500\n");
+    printf("\nPlease select one of the options above: ");
+    scanf("%s", buffer);
+    while (find_str_len(buffer) != 1 || 97 > convert_to_ascii(tolower(buffer[0])) || 102 < convert_to_ascii(tolower(buffer[0]))){
+        printf("\nPlease select a valid option (Single Character Format 'a'): ");
+        scanf("%s", buffer);        
+    }
+    choice = tolower(buffer[0]);
+    printf("%d\n", convert_to_ascii(buffer[0]));
+    return;
+}

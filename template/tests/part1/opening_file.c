@@ -52,7 +52,7 @@ void tokeniseRecord(const char *input, const char *delimiter,
 
 }
 
-void read_from_file(char *file_loc){
+void read_from_file(char *file_loc, int pointer){
     //Defining a File to be counted and a file to be formatted
     FILE* count_file = fopen(file_loc, "r"); 
     FILE* input_file = fopen(file_loc, "r");
@@ -77,18 +77,21 @@ void read_from_file(char *file_loc){
     }
     //Printing the number of records in the file
     printf("Number of records in file: %d\n", row_count);
-    //Printing the first 3 entries formatted
-    printf("%s/%s/%s", entries[0].date, entries[0].time, entries[0].steps);
-    printf("%s/%s/%s", entries[1].date, entries[1].time, entries[1].steps);
-    printf("%s/%s/%s", entries[2].date, entries[2].time, entries[2].steps);
-    
+    //Printing the first 3 entries formatted if there are 3 or more entries
+    if (row_count >= 3){
+        printf("%s/%s/%s", entries[0].date, entries[0].time, entries[0].steps);
+        printf("%s/%s/%s", entries[1].date, entries[1].time, entries[1].steps);
+        printf("%s/%s/%s", entries[2].date, entries[2].time, entries[2].steps);
+    }
     
     return;
 }
 
 void main(){
     //running the read from file function with the assigned csv file
-    read_from_file("/workspaces/comp1711_project/data/FitnessData_2023.csv");
+    //read_from_file("/workspaces/comp1711_project/data/FitnessData_2023.csv");
+    Fitness_Data *entries;
+    read_from_file("data/FitnessData_2023.csv", entries);
     return;
 
 }
