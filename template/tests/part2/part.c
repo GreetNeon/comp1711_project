@@ -14,6 +14,10 @@ typedef struct{
 void read_from_file(char *file_loc){
     //Defining a File to be counted and a file to be formatted
     FILE* count_file = fopen(file_loc, "r"); 
+    if (count_file == NULL){
+        printf("File path invalid, Please enter a valid file path");
+        return;
+    }
     FILE* input_file = fopen(file_loc, "r");
     //Defining a count variable to add entries to the entries array
     //Using get_row_count to assign the amount of rows to a variable
@@ -48,16 +52,29 @@ void read_from_file(char *file_loc){
 
 void main(){
     //Main function to create menu and take input
-    char choice, buffer[1248];
+    char choice, buffer[1248], file_path[1248];
     int string_len;
+    int running = 1;
     printf("This is a File Handling System\n\nOptions:\n A-Input filename\n B-Display number of records\n C-Date with lowest steps\n D-Date with highest steps\n E-Mean step count\n F-Longest Period of steps above 500\n");
     printf("\nPlease select one of the options above: ");
     scanf("%s", buffer);
-    while (find_str_len(buffer) != 1 || 97 > convert_to_ascii(tolower(buffer[0])) || 102 < convert_to_ascii(tolower(buffer[0]))){
-        printf("\nPlease select a valid option (Single Character Format 'a'): ");
-        scanf("%s", buffer);        
-    }
-    choice = tolower(buffer[0]);
-    printf("%d\n", convert_to_ascii(buffer[0]));
+    //Entry validation to ensure a valid option is chosen
+    //while (running == 1){
+        while (find_str_len(buffer) != 1 || 97 > convert_to_ascii(tolower(buffer[0])) || 102 < convert_to_ascii(tolower(buffer[0]))){
+            printf("\nPlease select a valid option (Single Character Format 'a'): ");
+            scanf("%s", buffer);        
+        }
+        choice = tolower(buffer[0]);
+        switch(choice){
+            case 'a':
+                printf("Please enter the file path: ");
+                scanf("%s", file_path);
+                file_path[strcspn(file_path, "\r\n")] = 0;
+                printf("This is the file path u have inputted: %s\n", file_path);
+                read_from_file(file_path);
+        }
+        
+    
+    //}
     return;
 }
