@@ -58,16 +58,16 @@ int get_row_count(FILE* count_file){
 
 
 // Complete the main function
-void main(char *file_loc){
+int main(int argc, char *argv[]){
     //Defining a File to be counted and a file to be formatted
-    FILE* count_file = fopen(file_loc, "r"); 
-    FILE* input_file = fopen(file_loc, "r");
+    FILE* count_file = fopen(argv[1], "r"); 
+    FILE* input_file = fopen(argv[1], "r");
     //Defining a count variable to add entries to the entries array
     //Using get_row_count to assign the amount of rows to a variable
     int row_count = get_row_count(count_file), count = 0;
     //Defining Buffer Arrays
     char buffer[30], prev_buffer[30];
-    //Defining an entry, and an entries pointer
+    //Defining an entry, and an entries pointer to create an array of type Fitness_Data
     Fitness_Data entry, *entries;
     //Allocating the appropriate amount of memory to entries
     entries = malloc(row_count * sizeof(Fitness_Data));
@@ -90,6 +90,6 @@ void main(char *file_loc){
         printf("%s/%s/%s", entries[2].date, entries[2].time, entries[2].steps);
     }
     
-    return;
+    return 0;
 }
-//main(/workspaces/comp1711_project/data/FitnessData_2023.csv);
+
