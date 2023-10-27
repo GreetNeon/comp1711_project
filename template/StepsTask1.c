@@ -58,7 +58,7 @@ int get_row_count(FILE* count_file){
 
 
 // Complete the main function
-int main(int argc, char *argv[]){
+void main(int argc, char *argv[]){
     //Defining a File to be counted and a file to be formatted
     FILE* count_file = fopen(argv[1], "r"); 
     FILE* input_file = fopen(argv[1], "r");
@@ -90,6 +90,6 @@ int main(int argc, char *argv[]){
         printf("%s/%s/%s", entries[2].date, entries[2].time, entries[2].steps);
     }
     
-    return 0;
+    return;
 }
 
