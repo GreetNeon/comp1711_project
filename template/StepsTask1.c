@@ -58,7 +58,7 @@ int get_row_count(FILE* count_file){
 
 
 // Complete the main function
-void main(char *file_path[]){
+void main(char *file_path){
     //Defining a File to be counted and a file to be formatted
     FILE* count_file = fopen(file_path, "r"); 
     FILE* input_file = fopen(file_path, "r");
