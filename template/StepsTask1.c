@@ -58,10 +58,10 @@ int get_row_count(FILE* count_file){
 
 
 // Complete the main function
-void main(int argc, char *argv[]){
+void main(char *file_path[]){
     //Defining a File to be counted and a file to be formatted
-    FILE* count_file = fopen(argv[1], "r"); 
-    FILE* input_file = fopen(argv[1], "r");
+    FILE* count_file = fopen(file_path, "r"); 
+    FILE* input_file = fopen(file_path, "r");
     //Defining a count variable to add entries to the entries array
     //Using get_row_count to assign the amount of rows to a variable
     int row_count = get_row_count(count_file), count = 0;
