@@ -83,20 +83,20 @@ int main(int argc, char *argv[]){
     {
         //Tokenising each record into an entry
         tokeniseRecord(buffer, ",", entry.date, entry.time, steps_array);
+        //Converting the amount of steps to an int
+        entry.steps = atoi(steps_array);
         //Assigning the entry to a memory location within entries
         entries[count] = entry;
         //Indexing the count
         count ++;
-        //Converting the amount of steps to an int
-        entry.steps = atoi(steps_array);
     }
     //Printing the number of records in the file
     printf("Number of records in file: %d\n", row_count);
     //Printing the first 3 entries formatted if there are 3 or more entries
     if (row_count >= 3){
-        printf("%s/%s/%d", entries[0].date, entries[0].time, entries[0].steps);
-        printf("%s/%s/%d", entries[1].date, entries[1].time, entries[1].steps);
-        printf("%s/%s/%d", entries[2].date, entries[2].time, entries[2].steps);
+        printf("%s/%s/%d\n", entries[0].date, entries[0].time, entries[0].steps);
+        printf("%s/%s/%d\n", entries[1].date, entries[1].time, entries[1].steps);
+        printf("%s/%s/%d\n", entries[2].date, entries[2].time, entries[2].steps);
     }
     
     return 0;
