@@ -48,33 +48,67 @@ Fitness_Data* read_from_file(char *file_loc){
     return entries;
 }
 
-void find_steps(char *file_path, Fitness_Data *entries, int *lowest, int *highest){
+void find_steps(char *file_path, Fitness_Data *entries,int *lowest_count, int *highest_count){
     FILE* count_file = fopen(file_path, "r");
-    int i = 0, row_count = get_row_count(count_file), current_steps;
+    int i = 0, row_count = get_row_count(count_file), current_steps, highest, lowest;
     while(i != row_count){
         current_steps = atoi(entries[i].steps);
         if(i == 0){
-            *highest = current_steps;
-            *lowest = current_steps;
+            highest = current_steps;
+            lowest = current_steps;
         }
-        else if(current_steps < *lowest){
-            *lowest = current_steps;
+        else if(current_steps < lowest){
+            lowest = current_steps;
+            *lowest_count = i;
         }
-        if(current_steps > *highest){
-            *highest = current_steps;
+        if(current_steps > highest){
+            highest = current_steps;
+            *highest_count = i;
         }
         i ++;
     }
     return;
     
+}
 
+float mean(Fitness_Data* entry_data, char *filepath){
+    int row_count = get_row_count(fopen(filepath, "r")), count, total = 0;
+    float mean;
+    for (count=0;count<row_count;count++){
+        total += atoi(entry_data[count].steps);
+    }
+    mean = total/row_count;
+    return mean;
+}
 
+void longest_period(Fitness_Data* entry_date, char* filepath, int *start_period, int *end_period){
+    int row_count = get_row_count(fopen(filepath, "r")), count, length=0, temp_length=0, is_period=0;
+    for(count=0;count<row_count;count++){
+        if (atoi(entry_date[count].steps) > 500 && is_period == 0){
+            temp_length += 1;
+            is_period = 1;
+            
+        }
+        else if(atoi(entry_date[count].steps) > 500 && is_period == 1){
+            temp_length += 1;
+
+        }
+        else if(atoi(entry_date[count].steps) <= 500 && is_period == 1){
+            if (temp_length > length){
+                length = temp_length;
+                *start_period = count - (length-1);
+                *end_period = count;
+            }
+            is_period = 0;
+            temp_length = 0;
+        }
+    }
 }
 
 void main(){
     //Main function to create menu and take input
     char choice, buffer[1248], file_path[1248], high_low_steps[3];
-    int string_len, lowest_steps, highest_steps;
+    int string_len, lowest_steps, highest_steps, lowest_steps_count, highest_steps_count, start_period, end_period;
     int running = 1;
     Fitness_Data *all_data;
     printf("This is a File Handling System\n\n");
@@ -84,6 +118,9 @@ void main(){
         //Entry validation to ensure a valid option is chosen
         //while (running == 1){
         while (find_str_len(buffer) != 1 || 97 > convert_to_ascii(tolower(buffer[0])) || 102 < convert_to_ascii(tolower(buffer[0]))){
+            if (tolower(buffer[0]) == 'q'){
+                break;
+            }
             printf("\nPlease select a valid option (Single Character Format 'a'): ");
             scanf("%s", buffer);        
         }
@@ -108,14 +145,28 @@ void main(){
                     break;
                 }
             case 'c':
-                find_steps(file_path, all_data, &lowest_steps, &highest_steps);
-                printf("The lowest number of steps: %d", lowest_steps);
+                find_steps(file_path, all_data, &lowest_steps_count, &highest_steps_count);
+                printf("The lowest number of steps: %d on date: %s at time: %s\n", atoi(all_data[lowest_steps_count].steps), all_data[lowest_steps_count].date, all_data[lowest_steps_count].time);
                 break;
             
             case 'd':
-                find_steps(file_path, all_data, &lowest_steps, &highest_steps);
-                printf("The Highest number of steps: %d", highest_steps);
+                find_steps(file_path, all_data, &lowest_steps_count, &highest_steps_count);
+                printf("The Highest number of steps: %d on date: %s at time: %s\n", atoi(all_data[highest_steps_count].steps), all_data[highest_steps_count].date, all_data[highest_steps_count].time);
                 break;
+
+            case 'e':
+                printf("The mean is: %f\n", mean(all_data, file_path));
+                break;
+
+            case 'f':
+                longest_period(all_data, file_path, &start_period, &end_period);
+                printf("Start date and time: %s@%s, end date and time: %s@%s\n", all_data[start_period].date, all_data[start_period].time, all_data[end_period].date, all_data[end_period].time);
+                break;
+
+            case 'q':
+                running = 0;
+                break;
+
 
         }
         
