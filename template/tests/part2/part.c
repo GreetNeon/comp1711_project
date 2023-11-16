@@ -10,29 +10,35 @@ typedef struct{
     char steps[10];
 } Fitness_Data;
 
+//Creating a function for option B outputing row count
 void output_row_count(char *file_path){
+    //Opening a file to be counted
     FILE* counting_file = fopen(file_path, "r");
+    //calling a function in fitness_header.h to return the row count and close the counting file
     int row_count = get_row_count(counting_file);
+    //Outputting the row count
     printf("Row count of inputted file: %d\n", row_count);
     return;
 }
 
+//Creating a function to return the fitness_data struct once the filename has been inputted
 Fitness_Data* read_from_file(char *file_loc){
-    //Defining a File to be counted and a file to be formatted
+    //Defining a file to get the row count
     FILE* count_file = fopen(file_loc, "r"); 
+    //if the file doesn't exist output error message and return to main()
     if (count_file == NULL){
         printf("File path invalid, Please enter a valid file path");
         return 0;
     }
+    //Defining a file to retrieve entries from
     FILE* input_file = fopen(file_loc, "r");
-    //Defining a count variable to add entries to the entries array
     //Using get_row_count to assign the amount of rows to a variable
     int row_count = get_row_count(count_file), count = 0;
     //Defining Buffer Arrays
     char buffer[30], prev_buffer[30];
     //Defining an entry, and an entries pointer
     Fitness_Data entry, *entries;
-    //Allocating the appropriate amount of memory to entries
+    //Allocating the appropriate amount of memory at the entries pointer
     entries = malloc(row_count * sizeof(Fitness_Data));
     //Looping Through the csv file
     while (fgets(buffer, sizeof(buffer), input_file))
@@ -44,11 +50,12 @@ Fitness_Data* read_from_file(char *file_loc){
         //Indexing the count
         count ++;
     }
+    //closing the file after all entries have been retrieved
     fclose(input_file);
     return entries;
 }
-
-void find_steps(char *file_path, Fitness_Data *entries,int *lowest_count, int *highest_count){
+//Defining a function to find the lowest and highest amount of steps
+void find_steps(char *file_path, Fitness_Data *entries, int *lowest_count, int *highest_count){
     FILE* count_file = fopen(file_path, "r");
     int i = 0, row_count = get_row_count(count_file), current_steps, highest, lowest;
     while(i != row_count){
