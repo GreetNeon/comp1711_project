@@ -45,7 +45,6 @@ int get_row_count(FILE* count_file){
 }
 int find_str_len(char *string){
     char *i;
-
     for (i = string;  *i; i++);
     return i - string;
 }
