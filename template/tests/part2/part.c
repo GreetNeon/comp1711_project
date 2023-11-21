@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
-#include <math.h>
 #include <unistd.h>
 
 typedef struct{
@@ -91,7 +90,7 @@ void find_steps(char *file_path, Fitness_Data *entries, int *lowest_count, int *
     
 }
 //Creating a function to retur the mean of type float
-float mean(Fitness_Data* entry_data, char *filepath){
+int mean(Fitness_Data* entry_data, char *filepath){
     //Getting the row count, defining a count variable
     int row_count = get_row_count(fopen(filepath, "r")), count;
     //Defining a variable for the mean to be stored in of type float, and a total to be used to store the sum of the steps
@@ -102,9 +101,9 @@ float mean(Fitness_Data* entry_data, char *filepath){
         total += atoi(entry_data[count].steps);
     }
     //Calculating the mean
-    mean = roundl(total/(float)row_count);
-    mean = (int)mean;
-    return mean;
+    mean = (total/(float)row_count);
+    int int_mean = (int)mean;
+    return int_mean;
 }
 //Creating a function to find the longest period of steps above 500
 void longest_period(Fitness_Data* entry_date, char* filepath, int *start_period, int *end_period){
@@ -135,7 +134,7 @@ void output_menu(){
     return;
 }
 
-void main(int argc, char *argv[]){
+int main(int argc, char *argv[]){
     //Main function to create menu and take input
     char choice, buffer[1248], file_path[1248], high_low_steps[3];
     int string_len, lowest_steps, highest_steps, lowest_steps_count, highest_steps_count, start_period, end_period;
@@ -175,7 +174,7 @@ void main(int argc, char *argv[]){
                 file_path[strcspn(file_path, "\r\n")] = 0;
                 if (fopen(file_path, "r") == NULL){
                     printf("Error: Could not find or open the file.\n");
-                    return;
+                    return 1;
                 }
                 else{
                     printf("File successfully loaded.\n");
@@ -204,7 +203,7 @@ void main(int argc, char *argv[]){
                 break;
 
             case 'e':
-                printf("Mean step count: %g\n", mean(all_data, file_path));
+                printf("Mean step count: %d\n", mean(all_data, file_path));
                 break;
 
             case 'f':
@@ -214,12 +213,12 @@ void main(int argc, char *argv[]){
 
             case 'q':
                 running = 0;
-                return;
+                return 1;
                 break;
 
 
         }
         
     }
-    return;
+    return 1;
 }
