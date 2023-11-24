@@ -1,4 +1,4 @@
-#include "fitness_header.h"
+#include "FitnessDataStruct.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -89,6 +89,20 @@ void find_steps(char *file_path, Fitness_Data *entries, int *lowest_count, int *
     return;
     
 }
+//Function to round a float into an int
+int roundfloat(float num){
+    //Declaring an int type of the entered float
+    int int_num = (int)num;
+    //If the decimal of the float is greater than 0.5
+    if (num - int_num > 0.5){
+        //return rounded up number
+        return (int_num + 1);
+    }
+    else{
+        //return rounded down number
+        return int_num;
+    }
+}
 //Creating a function to retur the mean of type float
 int mean(Fitness_Data* entry_data, char *filepath){
     //Getting the row count, defining a count variable
@@ -102,8 +116,7 @@ int mean(Fitness_Data* entry_data, char *filepath){
     }
     //Calculating the mean
     mean = (total/(float)row_count);
-    int int_mean = (int)mean;
-    return int_mean;
+    return roundfloat(mean);
 }
 //Creating a function to find the longest period of steps above 500
 void longest_period(Fitness_Data* entry_date, char* filepath, int *start_period, int *end_period){
@@ -138,7 +151,7 @@ int main(int argc, char *argv[]){
     //Main function to create menu and take input
     char choice, buffer[1248], file_path[1248], high_low_steps[3];
     int string_len, lowest_steps, highest_steps, lowest_steps_count, highest_steps_count, start_period, end_period;
-    int running = 1;
+    int running = 1, entered = 0;
     Fitness_Data *all_data;
     int opt;
     if (argc == 1){
@@ -148,12 +161,15 @@ int main(int argc, char *argv[]){
         while ((opt = getopt(argc, argv, "f:")) != -1){
             switch(opt){
                 case 'f': strcpy(file_path, optarg);
+                entered = 1;
+                all_data = read_from_file(file_path);
                 break;
                 default: strcpy(file_path, "../../FitnessData_2023.csv");
                 break;
             }
         }
     }
+    
     while(running == 1){
         output_menu();
         scanf("%s", buffer);
@@ -178,13 +194,13 @@ int main(int argc, char *argv[]){
                 }
                 else{
                     printf("File successfully loaded.\n");
+                    all_data = read_from_file(file_path);
+                    entered = 1;
                 }
-                all_data = read_from_file(file_path);
                 break;
 
             case 'b':
-                if(strcmp(file_path, "") == 0){
-                    printf("%s\n", file_path);
+                if(entered == 0){
                     printf("Please input a file path first\n");
                     break;
                 }
@@ -193,26 +209,51 @@ int main(int argc, char *argv[]){
                     break;
                 }
             case 'c':
-                find_steps(file_path, all_data, &lowest_steps_count, &highest_steps_count);
-                printf("Fewest steps: %s %s\n", all_data[lowest_steps_count].date, all_data[lowest_steps_count].time);
-                break;
+                if(entered == 0){
+                    printf("Please input a file path first\n");
+                    break;
+                }
+                else{
+                    find_steps(file_path, all_data, &lowest_steps_count, &highest_steps_count);
+                    printf("Fewest steps: %s %s\n", all_data[lowest_steps_count].date, all_data[lowest_steps_count].time);
+                    break;
+                }
             
             case 'd':
-                find_steps(file_path, all_data, &lowest_steps_count, &highest_steps_count);
-                printf("Largest steps: %s %s\n", all_data[highest_steps_count].date, all_data[highest_steps_count].time);
-                break;
+                if(entered == 0){
+                    printf("Please input a file path first\n");
+                    break;
+                }
+                else{
+                    find_steps(file_path, all_data, &lowest_steps_count, &highest_steps_count);
+                    printf("Largest steps: %s %s\n", all_data[highest_steps_count].date, all_data[highest_steps_count].time);
+                    break;
+                }
 
             case 'e':
-                printf("Mean step count: %d\n", mean(all_data, file_path));
+                if(entered == 0){
+                    printf("Please input a file path first\n");
+                    break;
+                }
+                else{
+                    printf("Mean step count: %d\n", mean(all_data, file_path));
+                }
                 break;
 
             case 'f':
-                longest_period(all_data, file_path, &start_period, &end_period);
-                printf("Longest period start: %s %s\nLongest period end: %s %s\n", all_data[start_period].date, all_data[start_period].time, all_data[end_period].date, all_data[end_period].time);
-                break;
+                if(entered == 0){
+                    printf("Please input a file path first\n");
+                    break;
+                }
+                else{
+                    longest_period(all_data, file_path, &start_period, &end_period);
+                    printf("Longest period start: %s %s\nLongest period end: %s %s\n", all_data[start_period].date, all_data[start_period].time, all_data[end_period].date, all_data[end_period].time);
+                    break;
+                }
 
             case 'q':
                 running = 0;
+                free(all_data);
                 return 1;
                 break;
 
