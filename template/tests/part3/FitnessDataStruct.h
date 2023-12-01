@@ -67,4 +67,5 @@ void tokenise_time(const char *input, const char *delimiter,
     if (token != NULL) {
         strcpy(minutes, token);
     }
+    free(inputCopy);
 }
