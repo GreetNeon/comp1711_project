@@ -94,12 +94,6 @@ void create_tsv(char *file_path, Fitness_Data *data, int row_count){
         data[i].date[strcspn(data[i].date, "\r\n")] = 0;
         data[i].time[strcspn(data[i].time, "\r\n")] = 0;
         data[i].steps[strcspn(data[i].steps, "\r\n")] = 0;
-        if(i==row_count-1){
-            fprintf(new_file, "%s\t%s\t%d", data[i].date, data[i].time, atoi(data[i].steps));
-        }
-        else{
-            fprintf(new_file, "%s\t%s\t%d\n", data[i].date, data[i].time, atoi(data[i].steps));
-        }
     }
 }
 
@@ -120,34 +114,34 @@ void bubblesort(Fitness_Data *data, char *file_path, int row_count){
 
 int main(){
     char file_path[1000];
-    int running = 1, row_count, index;
+    int row_count, index;
     Fitness_Data *FitData;
-    while(running == 1){
-        printf("Enter Filename: ");
-        scanf("%s", file_path);
-        if (fopen(file_path, "r") == NULL){
-            printf("Invalid File. Try Again\n");
-        }
-        else{
-            FitData = read_from_file(file_path);
-            row_count = get_row_count(fopen(file_path, "r"));
-            int date_valid, time_valid, steps_valid;
-            for(index=0;index<row_count;index++){
-                date_valid = validate_date(FitData[index].date);
-                time_valid = validate_time(FitData[index].time);
-                steps_valid = validate_steps(FitData[index].steps);
-                if((date_valid == 0) || (time_valid == 0) || (steps_valid == 0)){
-                    printf("Invalid File. Try Again\n");
-                    return 0;
-                }
-                }
-            int row_count = get_row_count(fopen(file_path, "r"));
-            bubblesort(FitData, file_path, row_count);
-            create_tsv(file_path, FitData, row_count);
-            printf("Data sorted and written to %s\n", file_path);
-            return 1;
-            }
+    printf("Enter Filename: ");
+    scanf("%s", file_path);
+    if (fopen(file_path, "r") == NULL){
+        printf("Invalid File. Try Again\n");
+        return 1;
     }
+    else{
+        FitData = read_from_file(file_path);
+        row_count = get_row_count(fopen(file_path, "r"));
+        int date_valid, time_valid, steps_valid;
+        for(index=0;index<row_count;index++){
+            date_valid = validate_date(FitData[index].date);
+            time_valid = validate_time(FitData[index].time);
+            steps_valid = validate_steps(FitData[index].steps);
+            if((date_valid == 0) || (time_valid == 0) || (steps_valid == 0)){
+                printf("Invalid File. Try Again\n");
+                return 1;
+            }
+            }
+        int row_count = get_row_count(fopen(file_path, "r"));
+        bubblesort(FitData, file_path, row_count);
+        create_tsv(file_path, FitData, row_count);
+        printf("Data sorted and written to %s.tsv\n", file_path);
+        return 0;
+        }
 }
+
 
 
